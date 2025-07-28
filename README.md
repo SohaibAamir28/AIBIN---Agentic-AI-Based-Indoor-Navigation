@@ -1,123 +1,371 @@
-# AIBIN---Agentic-AI-Based-Indoor-Navigation
-AIBIN: Agentic AI Based Indoor Navigation 
+# AIBIN Backend - AI-Powered Indoor Navigation Platform
 
-# Agentic AI-Based Indoor Navigation
+Modern FastAPI backend designed for AI-driven indoor navigation, with integration of AI agents, async database operations, and Groq LLM capabilities.
 
-## Project Overview
+## 🚀 Quick Start
 
-**Agentic AI-Based Indoor Navigation** uses advanced AI and augmented reality (AR) to deliver personalized, real-time navigation experiences. The system integrates **object recognition** via **CV techniques**, **AI decision-making** through **LangChain** and **LangGraph**, and a **knowledge graph** powered by **Neo4j**. The AI adapts to user preferences, offering tailored, interactive navigation guidance for indoor spaces.
+```bash
+# Using Docker Compose
+docker-compose up --build
 
-## Hackathon Details
+# Or manually
+pip install -r requirements.txt
+uvicorn app.main:app --reload
 
-- **Hackathon Start**: Friday, 8:00 PM PKT  
-- **Hackathon End**: Sunday, 11:59 PM PKT  
-- **Team Registration Deadline**: Saturday Night PKT
 
-### **Project Category**
-Indoor Navigation
+## 📁 Project Structure
 
-### **Project Description**
-This project integrates **AI** with **AR** to enhance **indoor navigation** by recognizing objects, providing context-aware navigation, and interacting with users via AI. The **LangChain** framework enables AI-driven interactions, while **LangGraph** orchestrates dynamic decision-making. The system uses **Neo4j** for managing data related to indoor objects and exhibits, providing personalized user guidance.
+```
+backend/
+backend/
+├── app/                          # Core application
+│   ├── main.py                  # FastAPI application entry point
+│   ├── api/                     # API route handlers (async)
+│   │   ├── __init__.py
+│   │   ├── auth.py             # Authentication endpoints
+│   │   ├── health.py           # Health check endpoints
+│   │   ├── navigation.py       # Indoor navigation endpoints
+│   │   ├── recommendations.py  # AI recommendation endpoints
+│   │   └── users.py            # User management endpoints
+│   ├── agents/                  # AI agents and Groq integrations
+│   │   ├── __init__.py
+│   │   ├── base_agent.py       # Base AI agent class
+│   │   ├── navigation_agent.py # Indoor navigation agent
+│   │   ├── voice_agent.py      # Voice interaction agent
+│   │   └── support_agent.py    # Customer support agent
+│   ├── config/                  # Configuration management
+│   │   ├── __init__.py
+│   │   └── config.py           # Application settings
+│   ├── db/                      # Database setup and connections
+│   │   ├── __init__.py
+│   │   └── database.py         # Async SQLAlchemy setup
+│   ├── logging/                 # Centralized logging
+│   │   ├── __init__.py
+│   │   └── log.py              # Structured JSON logging
+│   ├── models/                  # SQLAlchemy database models
+│   │   ├── __init__.py
+│   │   ├── base_model.py       # Base model with UUID and timestamps
+│   │   ├── user.py             # User model with preferences
+│   │   └── user_session.py     # Session management model
+│   ├── schemas/                 # Pydantic schemas for validation
+│   │   ├── __init__.py
+│   │   ├── auth_schemas.py     # Authentication schemas
+│   │   └── user_schemas.py     # User management schemas
+│   ├── services/                # Business logic layer (async)
+│   │   ├── __init__.py
+│   │   ├── auth_service.py     # Authentication service
+│   │   ├── user_service.py     # User management service
+│   │   └── ai_service.py       # AI agent orchestration
+│   └── utils/                   # Shared utilities
+│       ├── __init__.py
+│       ├── security.py         # Password hashing, JWT tokens
+│       └── exceptions.py       # Custom exception classes
+├── alembic/                     # Database migrations
+│   ├── versions/               # Migration files
+│   ├── env.py                  # Alembic environment
+│   └── script.py.mako          # Migration template
+├── tests/                       # Test suite
+│   ├── __init__.py
+│   ├── conftest.py             # Test configuration
+│   ├── test_auth.py            # Authentication tests
+│   ├── test_navigation.py      # Navigation system tests
+│   └── test_agents.py          # AI agent tests
+├── logs/                        # Log files (auto-created)
+├── requirements.txt             # Python dependencies
+├── requirements-dev.txt         # Development dependencies
+├── alembic.ini                 # Alembic configuration
+├── docker-compose.yml          # Development environment
+├── Dockerfile                  # Container definition
+├── .env.example               # Environment variables template
+└── README.md                  # This file
+```
+
+## ⚡ Technology Stack
+
+### Core Framework
+- **[FastAPI](https://fastapi.tiangolo.com/)** - Modern Python web framework with async support
+- **[Python 3.11+](https://python.org)** - Latest Python with enhanced async performance
+- **[Pydantic](https://pydantic.dev/)** - Data validation using Python type hints
+- **[Uvicorn](https://uvicorn.org/)** - Lightning-fast ASGI server
+
+### Database & ORM
+- **[SQLAlchemy](https://sqlalchemy.org/)** - Async ORM for database operations
+- **[PostgreSQL](https://postgresql.org/)** - Robust relational database
+- **[Alembic](https://alembic.sqlalchemy.org/)** - Database migration management
+- **[asyncpg](https://github.com/MagicStack/asyncpg)** - Fast PostgreSQL adapter
+
+### AI & ML
+- **[Groq](https://groq.com/)** - Ultra-fast LLM API for AI agents
+- **Custom AI Agents** - Specialized agents for Indoor Navigation functions
+- **Natural Language Processing** - Advanced text and voice processing
+
+### Security & Authentication
+- **[passlib](https://passlib.readthedocs.io/)** - Password hashing with bcrypt
+- **[python-jose](https://github.com/mpdavis/python-jose)** - JWT token management
+- **OAuth 2.0** - Modern authentication flows
+
+### Development & Deployment
+- **[Docker](https://docker.com/)** - Containerization for consistent deployments
+- **[pytest](https://pytest.org/)** - Comprehensive testing framework
+- **[Black](https://black.readthedocs.io/)** - Code formatting
+- **[Ruff](https://github.com/astral-sh/ruff)** - Fast Python linter
+
+## Async-First Design
+All database operations use async/await patterns
+
+Non-blocking I/O for maximum performance
+
+Async service layer for business logic
+
+Concurrent AI agent processing
+
+Modular Structure
+Services Layer: Business logic separated from API routes
+
+Repository Pattern: Data access abstraction
+
+Dependency Injection: Clean dependency management
+
+Event-Driven: Async event handling for complex workflows
+
+Security & Compliance
+JWT tokens with refresh mechanism
+
+Password hashing with bcrypt
+
+Rate limiting and request validation
+
+Structured logging for audit trails
+
+🗄️ Database Models
+User Management
+User: Core user model with preferences and security fields
+
+UserSession: JWT session management with device tracking
+
+Role-Based Access: Customer, Admin, Moderator roles
+
+Indoor Navigation Models
+Location: Model representing indoor locations (rooms, floors, etc.)
+
+NavigationHistory: Stores historical navigation data for users
+
+Features
+UUID primary keys for all models
+
+Soft delete functionality
+
+Automatic timestamps (created_at, updated_at)
+
+Async relationship loading
+
+🤖 AI Agent System
+Agent Types
+Navigation Agent: AI-driven indoor navigation assistance
+
+Voice Agent: Voice interaction for navigation instructions
+
+Support Agent: Automated customer service for navigation inquiries
+
+Product Agent: Personalized product recommendations within the indoor space
+
+Groq Integration
+Ultra-fast LLM API calls
+
+Model selection based on use case
+
+Token usage tracking and optimization
+
+Error handling and fallback strategies
+
+📊 Logging & Monitoring
+Structured Logging
+JSON-formatted logs for easy parsing
+
+Weekly log rotation (12 weeks retention)
+
+Contextual logging with user/session tracking
+
+Separate error log files
+
+Monitoring Points
+API request/response times
+
+Database operation performance
+
+AI agent interaction metrics
+
+User behavior analytics
+
+## 🔧 Configuration
+
+### Environment Variables
+
+```bash
+# Database
+DATABASE_URL=postgresql+asyncpg://user:password@localhost:5432/AIBIN
+REDIS_URL=redis://localhost:6379
+
+# AI Services
+GROQ_API_KEY=your_groq_api_key_here
+GROQ_MODEL=llama3-8b-8192
+
+# Security
+JWT_SECRET_KEY=your-jwt-secret-key-here
+JWT_ALGORITHM=HS256
+JWT_ACCESS_TOKEN_EXPIRE_MINUTES=30
+JWT_REFRESH_TOKEN_EXPIRE_DAYS=7
+
+# Application
+APP_NAME=AIBIN
+APP_VERSION=1.0.0
+DEBUG=false
+LOG_LEVEL=INFO
+LOG_DIR=logs
+
+# CORS
+CORS_ORIGINS=["http://localhost:3000", "http://localhost:8080"]
+```
+
+### Development Setup
+
+```bash
+# Clone and setup
+git clone <repository-url>
+cd AIBIN/backend
+
+# Install dependencies
+pip install -r requirements-dev.txt
+
+# Setup environment
+cp .env.example .env
+# Edit .env with your configuration
+
+# Run database migrations
+alembic upgrade head
+
+# Start development server
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+## 🧪 Testing
+
+### Running Tests
+
+```bash
+# Run all tests
+pytest
+
+# Run with coverage
+pytest --cov=app --cov-report=html
+
+# Run specific test file
+pytest tests/test_auth.py
+
+# Run with verbose output
+pytest -v
+```
+
+### Test Structure
+- **Unit Tests**: Individual function testing
+- **Integration Tests**: API endpoint testing
+- **Agent Tests**: AI agent functionality with mocked APIs
+- **Database Tests**: Async database operations
+
+## 🚀 Deployment
+
+### Docker Deployment
+
+```bash
+# Build image
+docker build -t AIBIN-backend .
+
+# Run container
+docker run -p 8000:8000 AIBIN-backend
+
+# Using Docker Compose
+docker-compose up --build
+```
+
+### Production Considerations
+- Use environment-specific configuration
+- Enable proper logging and monitoring
+- Configure load balancing for high availability
+- Set up database connection pooling
+- Implement proper error handling and retry logic
+
+## 📚 API Documentation
+
+### Interactive Documentation
+- **Swagger UI**: `http://localhost:8000/docs`
+- **ReDoc**: `http://localhost:8000/redoc`
+- **OpenAPI Schema**: `http://localhost:8000/openapi.json`
+
+### Key Endpoints
+```
+POST /api/auth/register     # User registration
+POST /api/auth/login        # User login
+POST /api/auth/refresh      # Token refresh
+GET  /api/users/profile     # User profile
+POST /api/agents/chat       # AI chat interaction
+GET  /api/navigation/route  # Indoor navigation route
+POST /api/Projects/search   # Product search
+POST /api/orders            # Order creation
+```
+
+## 🔄 Development Workflow
+
+### Code Quality
+```bash
+# Format code
+black app/
+
+# Lint code
+ruff check app/
+
+# Type checking
+mypy app/
+
+# Run tests
+pytest
+```
+
+### Database Migrations
+```bash
+# Create migration
+alembic revision --autogenerate -m "Description"
+
+# Apply migrations
+alembic upgrade head
+
+# Check migration status
+alembic current
+```
+
+## 🛠️ Troubleshooting
+
+### Common Issues
+1. **Database Connection**: Check DATABASE_URL format
+2. **Migration Errors**: Ensure database is running
+3. **Import Errors**: Check Python path and dependencies
+4. **Async Issues**: Ensure all database operations use async/await
+
+### Performance Optimization
+- Use connection pooling for database
+- Implement caching for frequent queries
+- Optimize AI agent calls with batching
+- Monitor and profile async operations
 
 ---
 
-## **Roadmap for Development**
+## 📝 Contributing
 
-### **Phase 1: Discovery and Planning (0-2 hours)**
-
-- **Tasks**:
-  1. Finalize project **title** and **category**.
-  2. Confirm **core features**: AI-based navigation, object recognition, voice interaction.
-  3. Set up **project management tools**: GitHub, Slack, Trello.
-  4. Define roles and assign tasks to team members.
-
-- **Deliverables**:
-  - Clear **project scope** and **team roles**.
+1. Follow the async-first architecture
+2. Write comprehensive tests for new features
+3. Use structured logging for debugging
+4. Follow PEP 8 style guidelines
+5. Document all public APIs
 
 ---
 
-### **Phase 2: Backend & Core Development (2-4 hours)**
-
-- **Tasks**:
-  1. Set up **FastAPI** backend server.
-  2. Install **LangChain**, **Neo4j**, **TensorFlow**, **OpenCV** for object detection.
-  3. **Object Recognition**: Implement object detection using **OpenCV** or **YOLO**.
-  4. **OCR**: Integrate **Tesseract** or **Google Vision API** for text extraction from objects.
-  5. Set up **Neo4j** to store object data and relationships.
-
-- **Deliverables**:
-  - **Backend API** for object recognition and AI responses.
-  - **Object detection** and **OCR functionality** working.
-
----
-
-### **Phase 3: AI Integration (4-6 hours)**
-
-- **Tasks**:
-  1. **Integrate LangChain** for AI-based conversations and responses.
-  2. Use **LangGraph** to model dynamic decision-making for context-aware navigation.
-  3. **Connect Neo4j** with the AI system to query objects and provide real-time personalized navigation information.
-
-- **Deliverables**:
-  - **AI-powered object recognition** and **real-time responses** to user queries.
-
----
-
-### **Phase 4: UI/UX & Final Adjustments (6-8 hours)**
-
-- **Tasks**:
-  1. **Design a simple UI** for user interaction (e.g., navigation commands, object query buttons).
-  2. Optimize **real-time AI responses** and **navigation feedback** for smooth user experience.
-  3. Ensure **cross-device compatibility** and test on **Android** for performance.
-
-- **Deliverables**:
-  - **UI/UX for user interaction** with AI.
-  - **Optimized performance** for smooth interaction.
-
----
-
-### **Phase 5: Final Submission (8-12 hours)**
-
-- **Tasks**:
-  1. **Prepare Demo Video**: Showcase key features (object recognition, AI interaction, navigation).
-  2. **Submit** project code and demo video to the hackathon platform.
-
-- **Deliverables**:
-  - **Demo Video** submitted.
-  - **Codebase** uploaded and final **project details** filled.
-
----
-
-## **Technologies Used**
-
-- **Backend**: FastAPI, LangChain, Neo4j
-- **AI**: LangGraph, Llama 3 (for AI reasoning and decision-making)
-- **AR**: ARCore, Unreal Engine
-- **OCR**: Tesseract / Google Vision API
-- **Database**: Neo4j (for knowledge graph)
-
----
-
-## **Important Links**
-
-- **Hackathon Registration**: [Pak Angels Gen AI Training - Cohort 6](https://hackathon.aspirepk.org/cohort6/)
-- **Hackathon Details**: [Event Overview](https://hackathon.aspirepk.org/cohort6/)
-
----
-
-### **Team Members**
-
-- **Team Leader**: Sohaib Aamir  
-  - **Team Member**: Ahsan Abdullah
-
-### **Resources**
-
-- **LangChain Documentation**: [Link](https://python.langchain.com/)
-- **Neo4j Setup**: [Link](https://neo4j.com/docs/)
-- **ARCore SDK**: [Link](https://developers.google.com/ar/develop)
-- **Tesseract OCR**: [Link](https://github.com/tesseract-ocr/tesseract)
-- **YOLO Object Detection**: [Link](https://github.com/AlexeyAB/darknet)
-
----
-
-This **README.md** format provides a clear, concise roadmap for your project, ensuring your team knows what to do within the limited time frame. Feel free to copy, paste, and customize it further!
+**Built with ❤️ using FastAPI and modern Python async patterns**
